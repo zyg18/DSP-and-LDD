@@ -65,8 +65,8 @@ int main(int argc, char* argv[]) {
     init_begin = clock();
     int iters = 1;
     string data_in = argv[1];
-    int weighted_type = atoi(argv[2]);               //0表示无权图，1表示带权图，2表示处理为无权图，3表示处理为带权图
-    int graph_type = atoi(argv[3]);                           //0:单部图,1：二部图
+    int weighted_type = atoi(argv[2]);               //0 :unweighted graph，1:weighted graph，2:choose the first two values in each line for unweighted graph，3:choose the first three value in each line for weighted graph
+    int graph_type = atoi(argv[3]);                           //0:Monopartite graph,1：Bipartite graph
     ifstream in("./data/" + data_in);
     cout << "the data name is:" << data_in << endl;
     if (!in) {
@@ -76,10 +76,10 @@ int main(int argc, char* argv[]) {
     else
         cout << "opened the file" << endl;
     string comment;
-    getline(in, comment);									//矩阵的解释
+    getline(in, comment);	
     char s;
     in >> s;
-    int edge_num, m, n;									    //矩阵的形状和边数
+    int edge_num, m, n;								
     in >> edge_num >> m >> n;
     cout << "edge_num=" << edge_num << "  " << "m=" << m << "  " << "n=" << n << "  " << endl;
     int max_m = 0, max_n = 0;
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
     if (graph_type == 0) {
         if (weighted_type == 0) {
             int a, b;
-            while (in >> a >> b)                  //无权图
+            while (in >> a >> b)
             {
                 if (a == b)
                     continue;
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
         }
         else if (weighted_type == 1) {
             int a, b, c;
-            while (in >> a >> b >> c)                  //带权图
+            while (in >> a >> b >> c)
             {
                 if (a == b)
                     continue;
@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
                     triplets.emplace_back(b - 1, a - 1, c);
             }
         }
-        else if (weighted_type == 2) {          //处理为无权图
+        else if (weighted_type == 2) {
             int a, b, c;
             while (in >> a >> b >> c)
             {
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
                     triplets.emplace_back(b - 1, a - 1, 1);
             }
         }
-        else if (weighted_type == 3) {          //处理为带权图
+        else if (weighted_type == 3) { 
             int a, b, c, d;
             while (in >> a >> b >> c >> d)
             {
@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
     else if (graph_type == 1) {
         if (weighted_type == 0) {
             int a, b;
-            while (in >> a >> b)                                           //无权图
+            while (in >> a >> b)
             {
                 b = m + b;
                 triplets.emplace_back(a - 1, b - 1, 1);
@@ -151,13 +151,13 @@ int main(int argc, char* argv[]) {
         }
         else if (weighted_type == 1) {
             int a, b, c;
-            while (in >> a >> b >> c)                  //带权图
+            while (in >> a >> b >> c) 
             {
                 b = m + b;
                 triplets.emplace_back(a - 1, b - 1, c);
             }
         }
-        else if (weighted_type == 2) {          //处理为无权图
+        else if (weighted_type == 2) { 
             int a, b, c;
             while (in >> a >> b >> c)
             {
@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) {
                 triplets.emplace_back(a - 1, b - 1, 1);
             }
         }
-        else if (weighted_type == 3) {          //处理为带权图
+        else if (weighted_type == 3) { 
             int a, b, c, d;
             while (in >> a >> b >> c >> d)
             {
@@ -186,8 +186,8 @@ int main(int argc, char* argv[]) {
     deg.resize(max_size);
     set<pair<int, int>>* nbrs = new set<pair<int, int>>[max_size];
     int sum_wts = 0;
-    SparseMatrix<double, RowMajor>A(max_size, max_size);                       //构造稀疏矩阵A
-    A.setFromTriplets(triplets.begin(), triplets.end());         //注意在edgelist中（4,35）有边，但是稀疏矩阵是以0为下标，所以是A(3,34)有值为1.
+    SparseMatrix<double, RowMajor>A(max_size, max_size);                       //Adjacency matrix
+    A.setFromTriplets(triplets.begin(), triplets.end());         //Note that in the edgelist (4, 35) there are edges, but the sparse matrix takes 0 as the subscript, so A (3, 34) has a value of 1
     A.makeCompressed();
     if (weighted_type == 0 || weighted_type == 2) {
         for (int i = 0; i < A.nonZeros(); i++)
@@ -198,7 +198,7 @@ int main(int argc, char* argv[]) {
         int start = A.outerIndexPtr()[i];
         int fin = A.outerIndexPtr()[i + 1];
         for (int j = start; j < fin; j++) {
-            int k = A.innerIndexPtr()[j];                            //邻居的序号
+            int k = A.innerIndexPtr()[j];                            //index for neighbour
             int wt = A.valuePtr()[j];
             nbrs[i].insert(make_pair(k, wt));
             nbrs[k].insert(make_pair(i, wt));
@@ -238,8 +238,8 @@ int main(int argc, char* argv[]) {
         double iter_max_density = (double)sum_wts / max_size;
         int cur_sum_wts = sum_wts, cur_n = max_size;
 
-        fill(exists.begin(), exists.end(), true);           //都初始化为True
-        iterans = exists;                                   //都初始化为True
+        fill(exists.begin(), exists.end(), true);           //Initialize to True
+        iterans = exists;                                   //Initialize to True
         int best_size = max_size;
         while (cur_n > 0) {
             cur_n--;
