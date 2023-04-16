@@ -11,17 +11,17 @@ class Mintree
 public:
 	//Mintree(int a,int b,int c,double d,int e):left(a),right(b),father(c),min_deg(d),min_source(e){}
 	Mintree() { left = -1; right = -1; father = -1; min_deg = -1; min_source = -1; }
-	int left;                 //记录Mintree中左子节点的序号,-1表示无
-	int right;                //记录Mintree中右子节点的序号,-1表示无
-	int father;               //记录Mintree中父亲节点的序号，-1表示无
-	double min_deg;           //记录目前保留的最大度
-	int min_source;           //记录目前保留的最大度的来源,0表示左，1表示右，-1表示这是根节点。
+	int left;                 //Record the sequence number of the left child node in Mintree, where -1 indicates none
+	int right;                //Record the serial number of the right child node in Mintree, where -1 indicates none
+	int father;               //Record the serial number of the parent node in Mintree, where -1 indicates none
+	double min_deg;           //Record the current maximum degree of retention
+	int min_source;           //Record the source of the maximum degree currently retained, with 0 indicating left, 1 indicating right, and -1 indicating that this is the root node.
 };
 int main(int argc, char** argv)
 {
 	string data_in=argv[1];
-  int weighted_type=atoi(argv[2]);               //0表示无权图，1表示带权图，2表示处理为无权图，3表示处理为带权图
-  int graph_type=atoi(argv[3]);                           //0:单部图,1：二部图
+  int weighted_type=atoi(argv[2]);               //0Represents an unweighted graph, 1 represents a weighted graph, 2 represents processing as an unweighted graph, and 3 represents processing as a weighted graph
+  int graph_type=atoi(argv[3]);                           //0:Monopartite graph,1：Bipartite graph
 	ifstream in("../../boundcut/data/"+data_in);
   //ifstream in("./data/"+data_in);
   cout<<"the data name is:"<<data_in<<endl;
@@ -32,10 +32,10 @@ int main(int argc, char** argv)
 	else
 		cout << "opened the file" << endl;
 	string comment;
-	getline(in, comment);									//矩阵的解释
+	getline(in, comment);					
 	char s;
 	in >> s;
-	int edge_num, m, n;									    //矩阵的形状和边数
+	int edge_num, m, n;									
 	in >> edge_num >> m >> n;
 	cout << "edge_num=" << edge_num << "  " << "m=" << m << "  " << "n=" << n << "  " << endl;
 	int max_m = 0, max_n = 0;
@@ -44,48 +44,48 @@ int main(int argc, char** argv)
 	if (graph_type == 0) {
 		if (weighted_type == 0) {
 			int a, b;
-			while (in >> a >> b)                  //无权图
+			while (in >> a >> b)               
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                       //For symmetry
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
 		else if (weighted_type == 1) {
 			int a, b, c;
-			while (in >> a >> b >> c)                  //带权图
+			while (in >> a >> b >> c)                  
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                    
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
-		else if (weighted_type == 2) {          //处理为无权图
+		else if (weighted_type == 2) {         
 			int a, b, c;
 			while (in >> a >> b >> c)
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                      
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
-		else if (weighted_type == 3) {          //处理为带权图
+		else if (weighted_type == 3) {         
 			int a, b, c, d;
 			while (in >> a >> b >> c >> d)
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                   
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
@@ -99,28 +99,28 @@ int main(int argc, char** argv)
 	else if (graph_type == 1) {
 		if (weighted_type == 0) {
 			int a, b;
-			while (in >> a >> b)                                           //无权图
+			while (in >> a >> b)                                         
 			{
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 			}
 		}
 		else if (weighted_type == 1) {
 			int a, b, c;
-			while (in >> a >> b >> c)                  //带权图
+			while (in >> a >> b >> c)                  
 			{
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                      
 
 			}
 		}
-		else if (weighted_type == 2) {          //处理为无权图
+		else if (weighted_type == 2) {          
 			int a, b, c;
 			while (in >> a >> b >> c)
 			{
@@ -128,10 +128,10 @@ int main(int argc, char** argv)
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 			}
 		}
-		else if (weighted_type == 3) {          //处理为带权图
+		else if (weighted_type == 3) {          
 			int a, b, c, d;
 			while (in >> a >> b >> c >> d)
 			{
@@ -139,7 +139,7 @@ int main(int argc, char** argv)
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                      
 			}
 		}
 		else {
@@ -149,8 +149,8 @@ int main(int argc, char** argv)
 		max_size = m + n;
 	}
 	cout << max_m << "  " << max_n << endl;
-	SparseMatrix<double, RowMajor>A(max_size, max_size);              //构造稀疏矩阵A
-	A.setFromTriplets(triplets.begin(), triplets.end());             //如果在edgelist中（4,35）有边，由于稀疏矩阵是以0为下标，所以是A(3,34)有值为1.
+	SparseMatrix<double, RowMajor>A(max_size, max_size);              //Adjacency matrix
+	A.setFromTriplets(triplets.begin(), triplets.end());             //Note that in the edgelist (4, 35) there are edges, but the sparse matrix takes 0 as the subscript, so A (3, 34) has a value of 1
 	A.makeCompressed();
 	if (weighted_type == 0 || weighted_type == 2) {
 		for (int i = 0; i < A.nonZeros(); i++)
@@ -163,8 +163,8 @@ int main(int argc, char** argv)
 		node[i].min_deg = A.row(i).sum();
 	}
 	//construct min tree
-	int start_f = max_size;                                           //父节点的序号起点
-	int start_s = 0;                                                  //子节点的序号起点
+	int start_f = max_size;                                           //The starting point of the sequence number of the parent node
+	int start_s = 0;                                                  //Starting point of sequence number for child nodes
 	int son_size = max_size;
 	while (son_size > 1) {
 		int father_size = (son_size + 1) / 2;
@@ -204,7 +204,7 @@ int main(int argc, char** argv)
 	double best_node;
 	int* ensure = new int[max_size]();
 	//charikar greedy algorithm
-	while (node_num > 1) {                     //当根节点不是最后一个节点时
+	while (node_num > 1) {                     
 		edge_sum -= node[root_id].min_deg;
 		node_num -= 1;
 		if (edge_sum / node_num > max_density) {
