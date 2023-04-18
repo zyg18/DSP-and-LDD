@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 
     clock_t init_begin, init_end;
     init_begin = clock();
-    int iters = 1;                 //应该是迭代次数
+    int iters = 1;                 
     string data_in = argv[1];
     int  weighted_type = atoi(argv[2]);               
     int graph_type = atoi(argv[3]);
