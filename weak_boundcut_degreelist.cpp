@@ -8,7 +8,7 @@ using namespace Eigen;
 using namespace std;
 
 
-struct Node {                                //,next:下一个点,prev:前一个点
+struct Node {                                
 	int next, prev;
 };
 
@@ -16,8 +16,8 @@ struct Node {                                //,next:下一个点,prev:前一个
 int main(int argc, char** argv)
 {
 	string data_in = argv[1];
-	int weighted_type = atoi(argv[2]);               //0表示无权图，1表示带权图，2表示处理为无权图，3表示处理为带权图
-	int graph_type = atoi(argv[3]);                           //0:单部图,1：二部图
+	int weighted_type = atoi(argv[2]);               
+	int graph_type = atoi(argv[3]);                           
 	ifstream in("./data/" + data_in);
 	cout << "the data name is:" << data_in << endl;
 	if (!in) {
@@ -27,10 +27,10 @@ int main(int argc, char** argv)
 	else
 		cout << "opened the file" << endl;
 	string comment;
-	getline(in, comment);									//矩阵的解释
+	getline(in, comment);									
 	char s;
 	in >> s;
-	int edge_num, m, n;									    //矩阵的形状和边数
+	int edge_num, m, n;									    
 	in >> edge_num >> m >> n;
 	cout << "edge_num=" << edge_num << "  " << "m=" << m << "  " << "n=" << n << "  " << endl;
 	int max_m = 0, max_n = 0;
@@ -39,48 +39,48 @@ int main(int argc, char** argv)
 	if (graph_type == 0) {
 		if (weighted_type == 0) {
 			int a, b;
-			while (in >> a >> b)                  //无权图
+			while (in >> a >> b)                  
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                      
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
 		else if (weighted_type == 1) {
 			int a, b, c;
-			while (in >> a >> b >> c)                  //带权图
+			while (in >> a >> b >> c)                 
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                      
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
-		else if (weighted_type == 2) {          //处理为无权图
+		else if (weighted_type == 2) {          
 			int a, b, c;
 			while (in >> a >> b >> c)
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
-		else if (weighted_type == 3) {          //处理为带权图
+		else if (weighted_type == 3) {          
 			int a, b, c, d;
 			while (in >> a >> b >> c >> d)
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                       
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
@@ -94,28 +94,28 @@ int main(int argc, char** argv)
 	else if (graph_type == 1) {
 		if (weighted_type == 0) {
 			int a, b;
-			while (in >> a >> b)                                           //无权图
+			while (in >> a >> b)                                          
 			{
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 			}
 		}
 		else if (weighted_type == 1) {
 			int a, b, c;
-			while (in >> a >> b >> c)                  //带权图
+			while (in >> a >> b >> c)                 
 			{
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                      
 
 			}
 		}
-		else if (weighted_type == 2) {          //处理为无权图
+		else if (weighted_type == 2) {          
 			int a, b, c;
 			while (in >> a >> b >> c)
 			{
@@ -123,10 +123,10 @@ int main(int argc, char** argv)
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 			}
 		}
-		else if (weighted_type == 3) {          //处理为带权图
+		else if (weighted_type == 3) {          
 			int a, b, c, d;
 			while (in >> a >> b >> c >> d)
 			{
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //为了对称
+				triplets.emplace_back(b - 1, a - 1, c);                       
 			}
 		}
 		else {
@@ -144,8 +144,8 @@ int main(int argc, char** argv)
 		max_size = m + n;
 	}
 	cout << "max_m is:" << max_m << "  " << "max_n is:" << max_n << endl;
-	SparseMatrix<int, RowMajor>A(max_size, max_size);                       //构造稀疏矩阵A
-	A.setFromTriplets(triplets.begin(), triplets.end());         //注意在edgelist中（4,35）有边，但是稀疏矩阵是以0为下标，所以是A(3,34)有值为1.0
+	SparseMatrix<int, RowMajor>A(max_size, max_size);                       
+	A.setFromTriplets(triplets.begin(), triplets.end());         
 	if (weighted_type == 0 || weighted_type == 2) {
 		for (int i = 0; i < A.nonZeros(); i++)
 			A.valuePtr()[i] = 1;
@@ -158,11 +158,11 @@ int main(int argc, char** argv)
 	double bound = (double)edge_sum / (2 * node_num);
 	int length = A.rows();
 	vector<int>A_cut;
-	int* cut_index = new int[length]();                    //需要删除的地方设为1
+	int* cut_index = new int[length]();                    
 	int* degree = new int[length]();
 	int max_degree=0;
 	for (int i = 0; i < length; i++) {
-		degree[i] = A.row(i).sum();   //第i个点的度
+		degree[i] = A.row(i).sum();   
 		max_degree = max_degree > degree[i] ? max_degree:degree[i];
 		if (degree[i] < bound) {
 			A_cut.push_back(i);
@@ -173,7 +173,6 @@ int main(int argc, char** argv)
 	int* degreelist = new int[max_degree+1]();
 	for (int i = 0; i <= max_degree; i++)
 		degreelist[i] = -1;
-	//建立节点列表，列表内部是双向链表
 	for (int i = 0; i <length; i++) {
 		node[i].next = degreelist[degree[i]];
 		node[i].prev = -1;
@@ -182,7 +181,7 @@ int main(int argc, char** argv)
 		degreelist[degree[i]] = i;
 	}
 	int iters = 1;
-	int*is_dealed = new int[length]();                         //确认每一个点在这一轮迭代中是否被处置
+	int*is_dealed = new int[length]();                         
 	while (A_cut.size() != 0) {
 		int* degree_decrease = new int[length]();
 		int edge_reduction = 0;
@@ -205,21 +204,19 @@ int main(int argc, char** argv)
 			edge_reduction += degree_decrease[neighbour[i]];
 		}
 		int deg = floor(bound);
-		degreelist[deg] = -1;//清空degreelist[deg]
+		degreelist[deg] = -1;
 		node_num -= A_cut.size();
 		edge_sum -= edge_reduction;
 		bound = (double)edge_sum / (2 * node_num);
 		A_cut.clear();
 		for (int i = 0; i < neighbour.size(); i++) {
 			int index = neighbour[i];
-			//维护initial_degree所在的节点列表
 			if (node[index].prev != -1)
 				node[node[index].prev].next = node[index].next;
 			else
 				degreelist[degree[index] + degree_decrease[index]] = node[index].next;
 			if (node[index].next != -1)
 				node[node[index].next].prev = node[index].prev;
-			//维护degree[index]所在的节点列表，把度小于新的bound的放入原来的节点列表deg=floor(bound)中
 			if (degree[index] > bound) {
 				node[index].next = degreelist[degree[index]];
 				node[index].prev = -1;
