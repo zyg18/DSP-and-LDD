@@ -43,7 +43,7 @@ struct Edge {                                //
     int y, next;
 };
 
-struct Node {                                //deg:点的度,next:下一个点,prev:前一个点,idx:
+struct Node {                                
     int deg, next, prev, idx;
     inline void clear() {
         deg = next = prev = 0;
@@ -53,26 +53,26 @@ struct Node {                                //deg:点的度,next:下一个点,p
 
 Node* lists;
 
-__inline void linklists(int x, int y) {     //点的排序(在列表里)
+__inline void linklists(int x, int y) {     
     if (y == 0) return;
     lists[x].next = y;
     lists[y].prev = x;
 };
 
-int* nxt, * prv, * itr;                      //用于Node类
+int* nxt, * prv, * itr;                      
 
-__inline void linknodes(int x, int y) {     //点的排序
+__inline void linknodes(int x, int y) {     
     if (y == -1) return;
     nxt[x] = y;
     prv[y] = x;
 };
 
-__inline void eraselist(int x) {            //删除点的操作（在列表里）
+__inline void eraselist(int x) {            
     lists[lists[x].prev].next = lists[x].next;
     if (lists[x].next != 0) lists[lists[x].next].prev = lists[x].prev;
 };
 
-__inline void erasenode(int x) {           //删除点的操作   erase:清除，抹去.
+__inline void erasenode(int x) {           
     if (prv[x] == -1) {
         lists[itr[x]].idx = nxt[x];
     }
@@ -85,7 +85,7 @@ int l = 0;
 Edge* edges;
 int* idx;
 
-__inline void build(int x, int y) {         //edge[k].next记录x的下一条边,edge[k].y记录x这一次连接的对象y.
+__inline void build(int x, int y) {         
     edges[++l].next = idx[x];
     edges[l].y = y;
     idx[x] = l;
@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
     init_begin = clock();
     int iters = 1;                 //应该是迭代次数
     string data_in = argv[1];
-    int  weighted_type = atoi(argv[2]);               //0表示无权图，1表示处理为无权图
+    int  weighted_type = atoi(argv[2]);               
     int graph_type = atoi(argv[3]);
     ifstream in("./data/" + data_in);
     cout << "the data name is:" << data_in << endl;
@@ -109,7 +109,7 @@ int main(int argc, char** argv) {
         cout << "opened the file" << endl;
     int edge_num, m, n;
     string comment;
-    getline(in, comment);									//矩阵的解释
+    getline(in, comment);									
     char s;
     in >> s;
     in >> edge_num >> m >> n;
@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
     if (graph_type == 0) {
         if (weighted_type == 0) {
             int a, b;
-            while (in >> a >> b)                  //无权图
+            while (in >> a >> b)                  
             {
                 if (a == b)
                     continue;
@@ -131,7 +131,7 @@ int main(int argc, char** argv) {
                     triplets.emplace_back(b - 1, a - 1, 1);
             }
         }
-        else if (weighted_type == 1) {          //处理为无权图
+        else if (weighted_type == 1) {          
             int a, b, c;
             while (in >> a >> b >> c)
             {
@@ -152,13 +152,13 @@ int main(int argc, char** argv) {
     else if (graph_type == 1) {
         if (weighted_type == 0) {
             int a, b;
-            while (in >> a >> b)                                           //无权图
+            while (in >> a >> b)                                           
             {
                 b = m + b;
                 triplets.emplace_back(a - 1, b - 1, 1);
             }
         }
-        else if (weighted_type == 1) {          //处理为无权图
+        else if (weighted_type == 1) {          
             int a, b, c;
             while (in >> a >> b >> c)
             {
@@ -185,8 +185,8 @@ int main(int argc, char** argv) {
     memset(w, 0, sizeof(int) * node_num); //initial vertex weights=0, i.e., no self loops at the start 
     memset(pos, 0, sizeof(int) * node_num);
     prv = new int[node_num]; nxt = new int[node_num];
-    SparseMatrix<double, RowMajor>A(node_num, node_num);                       //构造稀疏矩阵A
-    A.setFromTriplets(triplets.begin(), triplets.end());         //注意在edgelist中（4,35）有边，但是稀疏矩阵是以0为下标，所以是A(3,34)有值为1.
+    SparseMatrix<double, RowMajor>A(node_num, node_num);                       
+    A.setFromTriplets(triplets.begin(), triplets.end());         
     A.makeCompressed();
     for (int i = 0; i < A.nonZeros(); i++)
         A.valuePtr()[i] = 1;
@@ -220,16 +220,15 @@ int main(int argc, char** argv) {
         for (int i = 0; i < node_num; i++) {
             nxt[i] = prv[i] = -1;
             pos[i] = 0;
-
             deg[i] = w[i] + init_deg[i];                                       //degree for this iteration is "vertex weight" + actual degree
             deg_sorted[i] = make_pair(deg[i], i);
         }
-        sort(deg_sorted, deg_sorted + node_num);                                    //对点的度进行排序,对pair里的first进行升序排列。
+        sort(deg_sorted, deg_sorted + node_num);                                    
         n_list = 0;
 
         for (int i = 0; i < node_num; i++) {
-            int v = deg_sorted[i].second;                                     //v是度最小的点
-            if (n_list == 0 || lists[n_list].deg != deg_sorted[i].first) {     //应该是让lists里依次填入最小的度
+            int v = deg_sorted[i].second;                                     
+            if (n_list == 0 || lists[n_list].deg != deg_sorted[i].first) {     
                 ++n_list;
                 lists[n_list].clear();
                 linklists(n_list - 1, n_list);
