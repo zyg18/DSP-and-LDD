@@ -245,7 +245,7 @@ int main(int argc, char** argv) {
 	int* degree = new int[length]();
 	int max_degree=0;
 	for (int i = 0; i < length; i++) {
-		degree[i] = A.row(i).sum();   //第i个点的度
+		degree[i] = A.row(i).sum();   
 		max_degree = max_degree > degree[i] ? max_degree:degree[i];
 		if (degree[i] < bound) {
 			A_cut.push_back(i);
@@ -256,7 +256,6 @@ int main(int argc, char** argv) {
 	int* degreelist = new int[max_degree+1]();
 	for (int i = 0; i <= max_degree; i++)
 		degreelist[i] = -1;
-	//建立节点列表，列表内部是双向链表
 	for (int i = 0; i <length; i++) {
 		node[i].next = degreelist[degree[i]];
 		node[i].prev = -1;
