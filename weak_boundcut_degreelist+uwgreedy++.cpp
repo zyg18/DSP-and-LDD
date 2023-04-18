@@ -246,7 +246,6 @@ int main(int argc, char** argv)
 	end = clock();
 	double time = (double)(end - start) / CLOCKS_PER_SEC;
 	cout << "weak_boundcut cost time is:" << time << "s" << endl;
-	//手动建立双向链表
 	int start_list;
 	int* next = new int[max_degree]();
 	int* prev = new int[max_degree]();
