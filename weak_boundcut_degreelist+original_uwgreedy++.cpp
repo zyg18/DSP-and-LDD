@@ -15,7 +15,7 @@ Map<SparseMatrix<double, RowMajor>>spmatrix4_weighted(SparseMatrix<double, RowMa
 	int length2 = A_index.size();
 	int* sp_A = new int[length1]();
 	for (int i = 0; i < length2; i++)
-		sp_A[A_index[i]] = i + 1;                           //sp_AÀïËùÓĞ±»Ë÷ÒıµÄÎ»ÖÃĞ´ÁË×Ó¾ØÕóµÄÏÂ±ê£¨ÎªÁËÇø·Ö0£¬ÏÂ±ê´Ó1¿ªÊ¼£©£¬ÆäÓàÏÂ±êÎª0
+		sp_A[A_index[i]] = i + 1;                           
 	int* indptr = new int[length2 + 1];
 	indptr[0] = 0;
 	vector<int>indice;
@@ -48,7 +48,7 @@ struct Edge {
 	int y, next;
 };
 
-struct Node {                                //deg:µãµÄ¶È,next:ÏÂÒ»¸öµã,prev:Ç°Ò»¸öµã,idx:
+struct Node {                                
 	int deg, next, prev, idx;
 	inline void clear() {
 		deg = next = prev = 0;
@@ -58,26 +58,26 @@ struct Node {                                //deg:µãµÄ¶È,next:ÏÂÒ»¸öµã,prev:Ç°Ò
 
 Node* lists;
 
-__inline void linklists(int x, int y) {     //µãµÄÅÅĞò(ÔÚÁĞ±íÀï)
+__inline void linklists(int x, int y) {     
 	if (y == 0) return;
 	lists[x].next = y;
 	lists[y].prev = x;
 };
 
-int* nxt, * prv, * itr;                      //ÓÃÓÚNodeÀà
+int* nxt, * prv, * itr;                      
 
-__inline void linknodes(int x, int y) {     //µãµÄÅÅĞò
+__inline void linknodes(int x, int y) {     
 	if (y == -1) return;
 	nxt[x] = y;
 	prv[y] = x;
 };
 
-__inline void eraselist(int x) {            //É¾³ıµãµÄ²Ù×÷£¨ÔÚÁĞ±íÀï£©
+__inline void eraselist(int x) {            
 	lists[lists[x].prev].next = lists[x].next;
 	if (lists[x].next != 0) lists[lists[x].next].prev = lists[x].prev;
 };
 
-__inline void erasenode(int x) {           //É¾³ıµãµÄ²Ù×÷   erase:Çå³ı£¬Ä¨È¥.
+__inline void erasenode(int x) {           
 	if (prv[x] == -1) {
 		lists[itr[x]].idx = nxt[x];
 	}
@@ -90,7 +90,7 @@ int l = 0;
 Edge* edges;
 int* idx;
 
-__inline void build(int x, int y) {         //edge[k].next¼ÇÂ¼xµÄÏÂÒ»Ìõ±ß,edge[k].y¼ÇÂ¼xÕâÒ»´ÎÁ¬½ÓµÄ¶ÔÏóy.
+__inline void build(int x, int y) {         
 	edges[++l].next = idx[x];
 	edges[l].y = y;
 	idx[x] = l;
@@ -99,8 +99,8 @@ __inline void build(int x, int y) {         //edge[k].next¼ÇÂ¼xµÄÏÂÒ»Ìõ±ß,edge[k
 
 int main(int argc, char** argv) {
 	string data_in=argv[1];
-  int weighted_type=atoi(argv[2]);               //0±íÊ¾ÎŞÈ¨Í¼£¬1±íÊ¾´øÈ¨Í¼£¬2±íÊ¾´¦ÀíÎªÎŞÈ¨Í¼£¬3±íÊ¾´¦ÀíÎª´øÈ¨Í¼
-  int graph_type=atoi(argv[3]);                           //0:µ¥²¿Í¼,1£º¶ş²¿Í¼
+  int weighted_type=atoi(argv[2]);               
+  int graph_type=atoi(argv[3]);                           
 	ifstream in("./data/"+data_in);
   cout<<endl<<"the data name is:"<<data_in<<endl;
 	if (!in) {
@@ -110,10 +110,10 @@ int main(int argc, char** argv) {
 	else
 		cout << "opened the file" << endl;
 	string comment;
-	getline(in, comment);									//¾ØÕóµÄ½âÊÍ
+	getline(in, comment);									
 	char s;
 	in >> s;
-	int edge_num, m, n;									    //¾ØÕóµÄĞÎ×´ºÍ±ßÊı
+	int edge_num, m, n;									    
 	in >> edge_num >> m >> n;
 	cout << "edge_num=" << edge_num << "  " << "m=" << m << "  " << "n=" << n << "  " << endl;
 	int max_m = 0, max_n = 0;
@@ -122,48 +122,48 @@ int main(int argc, char** argv) {
 	if (graph_type == 0) {
 		if (weighted_type == 0) {
 			int a, b;
-			while (in >> a >> b)                  //ÎŞÈ¨Í¼
+			while (in >> a >> b)                  
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
 		else if (weighted_type == 1) {
 			int a, b, c;
-			while (in >> a >> b >> c)                  //´øÈ¨Í¼
+			while (in >> a >> b >> c)                  
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, c);                       
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
-		else if (weighted_type == 2) {          //´¦ÀíÎªÎŞÈ¨Í¼
+		else if (weighted_type == 2) {          
 			int a, b, c;
 			while (in >> a >> b >> c)
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
 		}
-		else if (weighted_type == 3) {          //´¦ÀíÎª´øÈ¨Í¼
+		else if (weighted_type == 3) {          
 			int a, b, c, d;
 			while (in >> a >> b >> c >> d)
 			{
 				if (a == b)
 					continue;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, c);                       
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 			}
@@ -177,28 +177,28 @@ int main(int argc, char** argv) {
 	else if (graph_type == 1) {
 		if (weighted_type == 0) {
 			int a, b;
-			while (in >> a >> b)                                           //ÎŞÈ¨Í¼
+			while (in >> a >> b)                                           
 			{
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, 1);                       
 			}
 		}
 		else if (weighted_type == 1) {
 			int a, b, c;
-			while (in >> a >> b >> c)                  //´øÈ¨Í¼
+			while (in >> a >> b >> c)                 
 			{
 				max_m = max_m > a ? max_m : a;
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, c);                       
 
 			}
 		}
-		else if (weighted_type == 2) {          //´¦ÀíÎªÎŞÈ¨Í¼
+		else if (weighted_type == 2) {          
 			int a, b, c;
 			while (in >> a >> b >> c)
 			{
@@ -206,10 +206,10 @@ int main(int argc, char** argv) {
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, 1);
-				triplets.emplace_back(b - 1, a - 1, 1);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, 1);                      
 			}
 		}
-		else if (weighted_type == 3) {          //´¦ÀíÎª´øÈ¨Í¼
+		else if (weighted_type == 3) {          
 			int a, b, c, d;
 			while (in >> a >> b >> c >> d)
 			{
@@ -217,7 +217,7 @@ int main(int argc, char** argv) {
 				max_n = max_n > b ? max_n : b;
 				b = m + b;
 				triplets.emplace_back(a - 1, b - 1, c);
-				triplets.emplace_back(b - 1, a - 1, c);                       //ÎªÁË¶Ô³Æ
+				triplets.emplace_back(b - 1, a - 1, c);                      
 			}
 		}
 		else {
@@ -227,8 +227,8 @@ int main(int argc, char** argv) {
 		max_size = m + n;
 	}
 	cout << "max_m is:" << max_m << "  " << "max_n is:" << max_n << endl;
-	SparseMatrix<double, RowMajor>A(max_size, max_size);                       //¹¹ÔìÏ¡Êè¾ØÕóA
-	A.setFromTriplets(triplets.begin(), triplets.end());         //×¢ÒâÔÚedgelistÖĞ£¨4,35£©ÓĞ±ß£¬µ«ÊÇÏ¡Êè¾ØÕóÊÇÒÔ0ÎªÏÂ±ê£¬ËùÒÔÊÇA(3,34)ÓĞÖµÎª1.0
+	SparseMatrix<double, RowMajor>A(max_size, max_size);                       
+	A.setFromTriplets(triplets.begin(), triplets.end());         
 	if (weighted_type == 0 || weighted_type == 2) {
 		for (int i = 0; i < A.nonZeros(); i++)
 			A.valuePtr()[i] = 1;
@@ -241,11 +241,11 @@ int main(int argc, char** argv) {
 	double bound = (double)edge_sum / (2 * node_num);
 	int length = A.rows();
 	vector<int>A_cut;
-	int* cut_index = new int[length]();                    //ĞèÒªÉ¾³ıµÄµØ·½ÉèÎª1
+	int* cut_index = new int[length]();                    
 	int* degree = new int[length]();
 	int max_degree=0;
 	for (int i = 0; i < length; i++) {
-		degree[i] = A.row(i).sum();   //µÚi¸öµãµÄ¶È
+		degree[i] = A.row(i).sum();   //ç¬¬iä¸ªç‚¹çš„åº¦
 		max_degree = max_degree > degree[i] ? max_degree:degree[i];
 		if (degree[i] < bound) {
 			A_cut.push_back(i);
@@ -256,7 +256,7 @@ int main(int argc, char** argv) {
 	int* degreelist = new int[max_degree+1]();
 	for (int i = 0; i <= max_degree; i++)
 		degreelist[i] = -1;
-	//½¨Á¢½ÚµãÁĞ±í£¬ÁĞ±íÄÚ²¿ÊÇË«ÏòÁ´±í
+	//å»ºç«‹èŠ‚ç‚¹åˆ—è¡¨ï¼Œåˆ—è¡¨å†…éƒ¨æ˜¯åŒå‘é“¾è¡¨
 	for (int i = 0; i <length; i++) {
 		node[i].next = degreelist[degree[i]];
 		node[i].prev = -1;
@@ -265,7 +265,7 @@ int main(int argc, char** argv) {
 		degreelist[degree[i]] = i;
 	}
 	int iters = 1;
-	int*is_dealed = new int[length]();                         //È·ÈÏÃ¿Ò»¸öµãÔÚÕâÒ»ÂÖµü´úÖĞÊÇ·ñ±»´¦ÖÃ
+	int*is_dealed = new int[length]();                         
 	while (A_cut.size() != 0) {
 		int* degree_decrease = new int[length]();
 		int edge_reduction = 0;
@@ -288,21 +288,19 @@ int main(int argc, char** argv) {
 			edge_reduction += degree_decrease[neighbour[i]];
 		}
 		int deg = floor(bound);
-		degreelist[deg] = -1;//Çå¿Õdegreelist[deg]
+		degreelist[deg] = -1;
 		node_num -= A_cut.size();
 		edge_sum -= edge_reduction;
 		bound = (double)edge_sum / (2 * node_num);
 		A_cut.clear();
 		for (int i = 0; i < neighbour.size(); i++) {
 			int index = neighbour[i];
-			//Î¬»¤initial_degreeËùÔÚµÄ½ÚµãÁĞ±í
 			if (node[index].prev != -1)
 				node[node[index].prev].next = node[index].next;
 			else
 				degreelist[degree[index] + degree_decrease[index]] = node[index].next;
 			if (node[index].next != -1)
 				node[node[index].next].prev = node[index].prev;
-			//Î¬»¤degree[index]ËùÔÚµÄ½ÚµãÁĞ±í£¬°Ñ¶ÈĞ¡ÓÚĞÂµÄboundµÄ·ÅÈëÔ­À´µÄ½ÚµãÁĞ±ídeg=floor(bound)ÖĞ
 			if (degree[index] > bound) {
 				node[index].next = degreelist[degree[index]];
 				node[index].prev = -1;
@@ -392,11 +390,11 @@ int main(int argc, char** argv) {
 			deg[i] = w[i] + init_deg[i];                                       //degree for this iteration is "vertex weight" + actual degree
 			deg_sorted[i] = make_pair(deg[i], i);
 		}
-		sort(deg_sorted, deg_sorted + node_number);                                    //¶ÔµãµÄ¶È½øĞĞÅÅĞò,¶ÔpairÀïµÄfirst½øĞĞÉıĞòÅÅÁĞ¡£
+		sort(deg_sorted, deg_sorted + node_number);                                    
 		n_list = 0;
 		for (int i = 0; i < node_number; i++) {
-			int v = deg_sorted[i].second;                                     //vÊÇ¶È×îĞ¡µÄµã
-			if (n_list == 0 || lists[n_list].deg != deg_sorted[i].first) {     //Ó¦¸ÃÊÇÈÃlistsÀïÒÀ´ÎÌîÈë×îĞ¡µÄ¶È
+			int v = deg_sorted[i].second;                                     
+			if (n_list == 0 || lists[n_list].deg != deg_sorted[i].first) {     
 				++n_list;
 				lists[n_list].clear();
 				linklists(n_list - 1, n_list);
