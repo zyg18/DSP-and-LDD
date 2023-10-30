@@ -239,7 +239,7 @@ int main(int argc, char** argv)
 			edge_reduction += degree_decrease[neighbour[i]];
 		}
 		int deg = floor(bound);
-		degreelist[deg] = -1;//Çå¿Õdegreelist[deg]
+		degreelist[deg] = -1;//Ã‡Ã¥Â¿Ã•degreelist[deg]
 		node_num -= A_cut.size();
 		edge_sum -= edge_reduction;
 		bound = (double)edge_sum / (2 * node_num);
