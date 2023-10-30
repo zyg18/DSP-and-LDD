@@ -1,11 +1,7 @@
-# Name:
-The pruning technology: we call it Boundcut.
-
-The iterative method: We call it LOWD in the paper(we call it bgreedy++ at first.)
 # Public library:
-ortools,eigen
+ortools,eigen-3.3.8
 # An example for exhibiting how to run it:
-chmod +x demo_weak_boundcut_weighted.sh  
+chmod +x demo_pruning.sh  
 
-./demo_weak_boundcut_weighted.sh
+./demo_pruning.sh
 
