@@ -314,7 +314,7 @@ int main(int argc, char** argv)
   
   double max_density;
   ofstream p;
-  p.open("./energy/mwu_"+data_in+".csv",ios::out|ios::trunc); 
+  p.open("./energy/fw_m_"+data_in+".csv",ios::out|ios::trunc); 
   double sum_time=0;
   double E=0;
   //FW-M
