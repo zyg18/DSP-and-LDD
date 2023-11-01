@@ -317,7 +317,7 @@ int main(int argc, char** argv)
   p.open("./energy/mwu_"+data_in+".csv",ios::out|ios::trunc); 
   double sum_time=0;
   double E=0;
-  //MWU
+  //FW-M
   for(int iter=1;iter<=T;iter++){
     start=clock();
     double d;
