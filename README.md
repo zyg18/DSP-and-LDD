@@ -9,3 +9,6 @@ chmod +x demo_pruning.sh
 g++  pruning+frank-wolfe.cpp -o pruning+fw.out
 
 ./pruning_fw.out comm-EmailEnron_SNAP.edgelist 0 0
+
+#Note
+There are five methods:LOWD,greedy++,frank-wolfe,fw-m and FISTA. We can use pruning technique to make the detection faster.
